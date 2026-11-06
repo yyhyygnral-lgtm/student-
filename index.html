@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>student
+    | إدارة وتحليل نتائج الطلاب</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">E</div>
+        <div><strong>student
+        </strong><span>نظام إدارة الطلاب</span></div>
+      </div>
+      <div class="side-caption">القائمة الرئيسية</div>
+      <button class="nav-link active" data-page="registration"><span class="nav-icon">＋</span> تسجيل الطلاب</button>
+      <button class="nav-link" data-page="results"><span class="nav-icon">▤</span> الدرجات والتقديرات</button>
+      <div class="sidebar-note">
+        <span class="note-icon">✓</span>
+        <strong>حفظ تلقائي</strong>
+        <p>بياناتك محفوظة على هذا الجهاز باستخدام Local Storage.</p>
+      </div>
+      <div class="sidebar-footer">student<span>•</span> الإصدار 1.0</div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">لوحة التحكم التعليمية</p>
+          <h1 id="page-title">تسجيل الطلاب</h1>
+          <p class="top-subtitle" id="page-subtitle">أضف بيانات الطلاب ودرجاتهم ونظّم سجلاتك بسهولة.</p>
+        </div>
+        <div class="top-date" id="today-date"></div>
+      </header>
+
+      <section class="page active" id="registration-page">
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon blue">♙</div><div><span>إجمالي الطلاب</span><strong id="total-count">0</strong></div></article>
+          <article class="stat-card"><div class="stat-icon green">✓</div><div><span>الطلاب الناجحون</span><strong id="passed-count">0</strong></div></article>
+          <article class="stat-card"><div class="stat-icon red">!</div><div><span>الطلاب الراسبون</span><strong id="failed-count">0</strong></div></article>
+          <article class="stat-card"><div class="stat-icon gold">％</div><div><span>متوسط الدرجات</span><strong id="overall-average">—</strong></div></article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel form-panel">
+            <div class="panel-heading">
+              <div><h2 id="form-title">إضافة طالب جديد</h2><p>أدخل البيانات التالية لإضافة سجل الطالب.</p></div>
+              <span class="heading-icon">＋</span>
+            </div>
+            <form id="student-form">
+              <div class="form-grid">
+                <label class="field"><span>رقم الطالب (ID) <b>*</b></span><input type="number" id="student-id" min="1" step="1" placeholder="مثال: 1001" required></label>
+                <label class="field"><span>اسم الطالب <b>*</b></span><input type="text" id="student-name" maxlength="80" placeholder="اكتب اسم الطالب بالكامل" required></label>
+                <label class="field"><span>الدرجة الأولى <b>*</b></span><input type="number" class="grade-input" id="grade1" min="0" max="100" step="0.01" placeholder="من 100" required></label>
+                <label class="field"><span>الدرجة الثانية <b>*</b></span><input type="number" class="grade-input" id="grade2" min="0" max="100" step="0.01" placeholder="من 100" required></label>
+                <label class="field"><span>الدرجة الثالثة <b>*</b></span><input type="number" class="grade-input" id="grade3" min="0" max="100" step="0.01" placeholder="من 100" required></label>
+                <label class="field"><span>نسبة الحضور (%) <b>*</b></span><input type="number" id="student-attendance" min="0" max="100" step="0.01" placeholder="مثال: 90" required></label>
+              </div>
+              <div class="form-hint">جميع الدرجات ونسبة الحضور من 100.</div>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit" id="save-btn">حفظ بيانات الطالب</button>
+                <button class="btn btn-light hidden" type="button" id="cancel-edit">إلغاء التعديل</button>
+                <button class="btn btn-light" type="reset" id="reset-btn">مسح الحقول</button>
+              </div>
+              <p class="message" id="form-message" role="status"></p>
+            </form>
+          </section>
+
+          <section class="panel file-panel">
+            <div class="panel-heading"><div><h2>إدارة ملفات الطلاب</h2><p>استيراد أو تصدير سجلات الطلاب.</p></div><span class="heading-icon">⇧</span></div>
+            <div class="upload-box">
+              <div class="upload-symbol">↑</div>
+              <strong>استيراد ملف بيانات</strong>
+              <p>اختر ملف CSV يحتوي على بيانات الطلاب.</p>
+              <label class="btn btn-outline file-label" for="csv-file">اختيار ملف CSV</label>
+              <input type="file" id="csv-file" accept=".csv,text/csv" hidden>
+            </div>
+            <div class="file-divider"><span>أو</span></div>
+            <button class="btn btn-dark full-width" id="export-btn" type="button">↓ تصدير بيانات الطلاب CSV</button>
+            <p class="small-note">يمكن فتح ملف CSV باستخدام Excel. عند الاستيراد يجب أن يحتوي على الأعمدة: id, name, grade1, grade2, grade3, attendance.</p>
+          </section>
+        </div>
+
+        <section class="panel table-panel">
+          <div class="panel-heading table-heading">
+            <div><h2>سجل الطلاب</h2><p>جميع الطلاب المسجلين في النظام.</p></div>
+            <div class="search-wrap"><span>⌕</span><input type="search" id="student-search" placeholder="ابحث بالاسم أو ID..."></div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>ID</th><th>اسم الطالب</th><th>الدرجة 1</th><th>الدرجة 2</th><th>الدرجة 3</th><th>المتوسط</th><th>التقدير</th><th>الإجراءات</th></tr></thead>
+              <tbody id="students-table-body"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="empty-students"><div>♙</div><strong>لا يوجد طلاب حتى الآن</strong><p>ابدأ بإضافة أول طالب من النموذج بالأعلى.</p></div>
+        </section>
+      </section>
+
+      <section class="page" id="results-page">
+        <section class="panel results-search-panel">
+          <div class="panel-heading"><div><h2>الاستعلام عن نتيجة طالب</h2><p>اكتب رقم الطالب أو اسمه لعرض النتيجة بالتفصيل.</p></div><span class="heading-icon">⌕</span></div>
+          <div class="result-search-row">
+            <input type="search" id="result-search" placeholder="اكتب اسم الطالب أو رقم ID...">
+            <button class="btn btn-primary" id="find-result-btn">عرض النتيجة</button>
+          </div>
+          <div class="search-hint">يمكنك أيضاً اختيار طالب من قائمة النتائج بالأسفل.</div>
+        </section>
+
+        <section class="result-placeholder panel" id="result-placeholder">
+          <div class="placeholder-icon">▤</div><h2>نتيجة الطالب ستظهر هنا</h2><p>ابحث عن طالب باستخدام الاسم أو رقم ID لعرض الدرجات والتقدير النهائي.</p>
+        </section>
+
+        <section class="panel result-card hidden" id="student-result">
+          <div class="result-card-head">
+            <div><p class="eyebrow">بيان نتيجة الطالب</p><h2 id="result-name">—</h2><span class="student-code" id="result-id">ID: —</span></div>
+            <div class="grade-badge" id="result-grade-badge">—</div>
+          </div>
+          <div class="result-metrics">
+            <div><span>المتوسط العام</span><strong id="result-average">—</strong></div>
+            <div><span>التقدير</span><strong id="result-grade">—</strong></div>
+            <div><span>النتيجة</span><strong id="result-status">—</strong></div>
+            <div><span>نسبة الحضور</span><strong id="result-attendance">—</strong></div>
+          </div>
+          <h3 class="section-title">تفاصيل الدرجات</h3>
+          <div class="grade-bars" id="grade-bars"></div>
+          <div class="result-footer"><span id="result-summary"></span><button class="btn btn-outline" id="edit-result-btn">تعديل بيانات الطالب</button></div>
+        </section>
+
+        <section class="panel all-results-panel">
+          <div class="panel-heading"><div><h2>قائمة النتائج</h2><p>اضغط على عرض النتيجة لمراجعة بيانات أي طالب.</p></div></div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>ID</th><th>اسم الطالب</th><th>المتوسط</th><th>التقدير</th><th>النتيجة</th><th>التفاصيل</th></tr></thead>
+              <tbody id="results-table-body"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="empty-results"><div>▤</div><strong>لا توجد نتائج لعرضها</strong><p>أضف الطلاب أولاً من صفحة تسجيل الطلاب.</p></div>
+        </section>
+      </section>
+
+      <footer class="main-footer">EduTrack © <span id="year"></span> — نظام مبسط لإدارة وتحليل نتائج الطلاب</footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="JS/main.js"></script>
+</body>
+</html>
